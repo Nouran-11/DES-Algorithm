@@ -1,11 +1,11 @@
 /*
  * CSE451 Computer & Network Security - Assignment 1: DES
  *
- * Team members:
- *   Member 1: [Full name] - [Student ID]
- *   Member 2: [Full name] - [Student ID]
- *   Member 3: [Full name] - [Student ID]
- *   Member 4: [Full name] - [Student ID]
+ * Team 4:
+ *   Menna Mohamed NasrEldien Mohamed  - 2200806
+ *   Fatma Mohamed Hany Hashem         - 2200558
+ *   Nouran Atef Abdel Gayed           - 2200165
+ *   Menna Tarik Mohamed Tawfik        - 2200600
  *
  * Usage:
  *   studentID e key plaintext  ciphertext
