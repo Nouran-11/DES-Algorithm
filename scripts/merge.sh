@@ -10,8 +10,8 @@ mkdir -p build
 
 # Order matters: headers (declarations) first, then implementations, main last.
 FILES=(
-  src/bit_ops.h src/des_tables.h src/key_schedule.h src/des.h src/file_ecb.h
-  src/des_tables.c src/key_schedule.c src/des.c src/file_ecb.c src/main.c
+  src/bit_ops.h src/des_tables.h src/key_schedule.h src/des.h src/process_file.h
+  src/des_tables.c src/key_schedule.c src/des.c src/process_file.c src/main.c
 )
 
 {
