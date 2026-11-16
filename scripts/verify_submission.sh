@@ -22,9 +22,9 @@ else bad "compile (see below)"; cat build.log; exit 1; fi
 [[ -s build.log ]] && { echo "  note: compiler warnings:"; sed 's/^/    /' build.log; }
 P=./studentID
 
-echo "== 2. Known-answer vectors (key file = 8 raw bytes)"
+echo "== 2. Known-answer vectors (key file = 16 hex characters)"
 while read -r K PT CT; do
-  hex2bin "$K" k.bin; hex2bin "$PT" p.bin
+  printf '%s' "$K" > k.bin; hex2bin "$PT" p.bin
   $P e k.bin p.bin c.bin; got=$(bin2hex c.bin)
   [[ "$got" == "$CT" ]] && ok "E $K/$PT -> $CT" || bad "E $K/$PT expected $CT got $got"
   $P d k.bin c.bin r.bin
@@ -36,7 +36,7 @@ done <<'V'
 V
 
 echo "== 3. Edge cases"
-hex2bin 133457799BBCDFF1 k.bin
+printf '%s' 133457799BBCDFF1 > k.bin
 : > empty.bin
 $P e k.bin empty.bin out.bin; rc=$?
 [[ $rc -lt 128 && -f out.bin && ! -s out.bin ]] && ok "empty input -> empty output" || bad "empty input (rc=$rc)"
@@ -49,12 +49,12 @@ cmp -s edge.bin edge.dec && ok "0x00/0xFF/all-byte round trip" || bad "binary ro
 
 echo "== 4. Large file (${MB} MB) correctness + timing"
 python3 -c "import os,sys;sys.stdout.buffer.write(os.urandom(int(sys.argv[1])*1048576))" "$MB" > big.bin
-python3 -c "import os,sys;sys.stdout.buffer.write(os.urandom(8))" > rk.bin
+RK=$(python3 -c "import os;print(os.urandom(8).hex().upper())"); printf '%s' "$RK" > rk.bin
 s=$(date +%s.%N); $P e rk.bin big.bin big.enc; m=$(date +%s.%N); $P d rk.bin big.enc big.dec; e=$(date +%s.%N)
 [[ $(stat -c%s big.enc) -eq $(stat -c%s big.bin) ]] && ok "output size == input size" || bad "output size changed (padding?)"
 cmp -s big.bin big.dec && ok "large round trip byte-identical" || bad "large round trip differs"
 printf "  time  encrypt %.3fs   decrypt %.3fs\n" "$(echo "$m-$s" | bc)" "$(echo "$e-$m" | bc)"
-if openssl enc -des-ecb -nopad -K "$(bin2hex rk.bin)" -provider legacy -provider default -in big.bin -out ref.enc 2>/dev/null; then
+if openssl enc -des-ecb -nopad -K "$RK" -provider legacy -provider default -in big.bin -out ref.enc 2>/dev/null; then
   cmp -s big.enc ref.enc && ok "matches OpenSSL DES-ECB on random key + data" || bad "differs from OpenSSL DES-ECB"
 else
   echo "  skip  OpenSSL reference not available"

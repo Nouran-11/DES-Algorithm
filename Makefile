@@ -20,7 +20,7 @@ test-keys: build/test_key_schedule
 build/test_key_schedule: tests/test_key_schedule.c src/key_schedule.c src/key_schedule.h | build
 	$(CC) $(CFLAGS) tests/test_key_schedule.c src/key_schedule.c -o $@
 
-# Merge everything into build/$(ID).c (needs des.c, file_ecb.c, main.c to exist)
+# Merge everything into build/$(ID).c (needs des.c, process_file.c, main.c to exist)
 submission:
 	bash scripts/merge.sh $(ID)
 
