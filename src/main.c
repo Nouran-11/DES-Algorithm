@@ -1,3 +1,12 @@
+/* 
+Team names and IDs:
+
+- Menna Tarik Mohamed Tawfik  2200600
+- Menna Mohamed NasrEldin  2200806
+- Fatma Mohamed Hany  2200558
+- Nouran Atef AbdelGayed  2200165
+*/
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
